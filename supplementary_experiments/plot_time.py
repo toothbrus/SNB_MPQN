@@ -3,32 +3,29 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # ================= 可配置参数 =================
-CSV_FILE = "execution_time_default_parameters_summary.csv"   # 你的 summary CSV
+CSV_FILE = "experiment_results_raw.csv"   # 你的 summary CSV
 OUTPUT_PREFIX = "time_bar"                    # 输出图片前缀
 # =============================================
 
 df = pd.read_csv(CSV_FILE)
 
 # 创建显示标签：区分 QMSN 的两种模式
-# def make_label(row):
-#     if row['network'] == 'qmsn':
-#         mode = row.get('mode', 'N/A')
-#         if mode == 'reconfig':
-#             return 'QMSN (reconfig)'
-#         elif mode == 'timeslot':
-#             return 'QMSN (timeslot)'
-#         else:
-#             return 'QMSN'
-#     else:
-#         return row['network'].upper()
-
 def make_label(row):
+    if row['network'] == 'qmsn':
+        mode = row.get('mode', 'N/A')
+        if mode == 'reconfig':
+            return 'QMSN (reconfig)'
+        elif mode == 'timeslot':
+            return 'QMSN (timeslot)'
+        else:
+            return 'QMSN'
+    else:
         return row['network'].upper()
 
 df['label'] = df.apply(make_label, axis=1)
 
 # 期望的标签顺序（所有网络）
-label_order = ['MPQN', 'QMSN', 'STATIC_LINE', 'STATIC_GRID']
+label_order = ['MPQN', 'QMSN (timeslot)', 'QMSN (reconfig)', 'STATIC_LINE', 'STATIC_GRID']
 # 只保留实际存在的标签
 existing_labels = [l for l in label_order if l in df['label'].unique()]
 
@@ -67,9 +64,9 @@ for circuit in circuits:
     ax.set_xticks(x)
     ax.set_xticklabels(existing_labels, rotation=30, ha='right')
     ax.set_ylabel('Total Execution Time (μs)')
-    # ax.set_title(f'Execution Time Comparison for {circuit}')
+    ax.set_title(f'Execution Time Comparison for {circuit}')
     plt.tight_layout()
-    filename = f"{OUTPUT_PREFIX}_{circuit}.pdf"
+    filename = f"{OUTPUT_PREFIX}_{circuit}_1.pdf"
     plt.savefig(filename, dpi=300)
     plt.close()
     print(f"Saved time plot for {circuit} -> {filename}")

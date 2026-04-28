@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # ================= 配置 =================
-CSV_FILE = "execution_time_pc_sweep_summary.csv"  # 请确保文件名正确
-Y_COLUMN = "exec_time_mean"
-ERROR_COLUMN = "exec_time_std"
+CSV_FILE = "execution_time_pc_sweep.csv"  # 请确保文件名正确
+Y_COLUMN = "exec_time"
+# ERROR_COLUMN = "exec_time_std"
 X_COLUMN = "p_c"
 OUTPUT_PREFIX = "pc_sweep_exec_time"
 # =========================================
@@ -43,7 +43,7 @@ for circuit in circuits:
             continue
         plt.errorbar(
             group[X_COLUMN], group[Y_COLUMN],
-            yerr=group[ERROR_COLUMN],
+            # yerr=group[ERROR_COLUMN],
             marker='o', markersize=6, capsize=5,
             label=label, linewidth=2,
             color=colors.get(label, None)  # 如果未定义，自动使用默认颜色
